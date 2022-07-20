@@ -22,7 +22,11 @@
        :get
        {:summary   "Retrieves all todos"
         :handler   handlers/all-todos
-        :responses {200 {:body [Todo]}}}}]]
+        :responses {200 {:body [Todo]}}}
+       :delete
+       {:summary   "Deletes all todos"
+        :handler   handlers/delete-all-todos
+        :responses {204 nil}}}]]
     {:data {:coercion   reitit.coercion.schema/coercion
             :middleware [rrc/coerce-exceptions-middleware
                          rrc/coerce-request-middleware

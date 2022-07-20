@@ -26,3 +26,8 @@
   "Inserts a new todo."
   [vals]
   (query (sql/format {:insert-into :todos :columns [:name :done] :values [vals]})))
+
+(defn delete-all
+  "Deletes all todos."
+  []
+  (query (sql/format {:delete-from [:todos]})))

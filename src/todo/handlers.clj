@@ -13,6 +13,10 @@
   ([]
    (ok "")))
 
+(defn no-content
+  []
+  {:status 204})
+
 (defn save-todo
   [{:keys [body-params]}]
   (db/insert-todo (vals body-params))
@@ -21,3 +25,8 @@
 (defn all-todos
   [_]
   (ok (db/get-all-todos)))
+
+(defn delete-all-todos
+  [_]
+  (db/delete-all)
+  (no-content))
