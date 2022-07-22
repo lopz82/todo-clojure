@@ -9,10 +9,12 @@
    (ok "")))
 
 (defn header
+  "Adds a header to the response."
   [response name value]
   (assoc-in response [:headers name] (str value)))
 
 (defn add-location-header
+  "Adds a location header to the response using the base uri."
   [response uri id]
   (->> id
        (format "%s/%s" uri)
