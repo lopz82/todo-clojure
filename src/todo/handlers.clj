@@ -8,14 +8,25 @@
   ([]
    (ok "")))
 
+(defn header
+  [response name value]
+  (assoc-in response [:headers name] (str value)))
+
+(defn add-location-header
+  [response uri id]
+  (->> id
+       (format "%s/%s" uri)
+       (header response "Location")))
+
 (defn created [] {:status 201})
 (defn no-content [] {:status 204})
 (defn not-found [] {:status 404})
 
 (defn save-todo
-  [{:keys [body-params]}]
-  (db/insert-todo body-params)
-  (created))
+  [{:keys [body-params uri]}]
+  (->> (db/insert-todo body-params)
+       :id
+       (add-location-header (created) uri)))
 
 (defn all-todos
   [_]
