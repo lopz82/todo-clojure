@@ -1,11 +1,6 @@
 (ns todo.handlers
   (:require [todo.db :as db]))
 
-(defn created
-  []
-  {:status 201
-   :body   ""})
-
 (defn ok
   ([body]
    {:status 200
@@ -13,9 +8,9 @@
   ([]
    (ok "")))
 
-(defn no-content
-  []
-  {:status 204})
+(defn created [] {:status 201})
+(defn no-content [] {:status 204})
+(defn not-found [] {:status 404})
 
 (defn save-todo
   [{:keys [body-params]}]
