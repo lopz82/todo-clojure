@@ -39,7 +39,7 @@
 
 (defn get-todo
   [{{:keys [id]} :path-params}]
-  (let [result (-> id Integer. db/get-todo first)]
+  (let [result (-> id Integer. db/get-todo)]
     (cond
       (empty? result) (not-found)
       :else (ok result))))
@@ -47,14 +47,14 @@
 (defn modify-todo
   [{:keys        [body-params]
     {:keys [id]} :path-params}]
-  (let [result (-> id Integer. (db/modify-todo body-params) first)]
+  (let [result (-> id Integer. (db/modify-todo body-params))]
     (cond
       (empty? result) (not-found)
-      :else (ok))))
+      :else (ok result))))
 
 (defn delete-todo
   [{{:keys [id]} :path-params}]
-  (let [result (-> id Integer. db/delete-todo first)]
+  (let [result (-> id Integer. db/delete-todo)]
     (cond
       (empty? result) (not-found)
       :else (no-content))))
