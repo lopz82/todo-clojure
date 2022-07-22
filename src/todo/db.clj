@@ -27,6 +27,11 @@
   [vals]
   (query (sql/format {:insert-into :todos :columns [:name :done] :values [vals]})))
 
+(defn delete-todo
+  "Deletes one todo."
+  [id]
+  (query (sql/format {:delete-from [:todos] :where [:= :id id]})))
+
 (defn delete-all
   "Deletes all todos."
   []

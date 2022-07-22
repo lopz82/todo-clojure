@@ -45,3 +45,9 @@
       (db/modify-todo body-params)
       first
       ok))
+
+(defn delete-todo
+  [{{:keys [id]} :path-params}]
+  (-> (Integer. id)
+      db/delete-todo)
+  (no-content))

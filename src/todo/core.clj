@@ -52,7 +52,12 @@
                     {:summary "Updates one task"
                      :handler handlers/modify-todo
                      :parameters {:body Todo-patch}
-                     :responses {200 {:body Todo-response}}}}]]
+                     :responses {200 {:body Todo-response}}}
+                    :delete
+                    {:summary "Deletes one task"
+                     :handler handlers/delete-todo
+                     :parameters {:body nil}
+                     :responses {204 nil}}}]]
     {:data {:muuntaja   m/instance
             :coercion   reitit.coercion.schema/coercion
             :middleware [;; rrmm/format-middleware             ;; Remove to get data instead of a stream when working in the REPL
