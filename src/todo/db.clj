@@ -1,14 +1,17 @@
 (ns todo.db
   (:require [next.jdbc :as jdbc]
+            [next.jdbc.result-set :as rs]
             [honey.sql :as sql]))
 
 (def db {:dbtype "postgres" :dbname "todos" :host "localhost" :port 65432 :user "postgres" :password "pass"})
 (def ds (jdbc/get-datasource db))
 
+(def query-options {:return-keys true :builder-fn rs/as-unqualified-lower-maps})
+
 (defn query
   "Helper function to execute the SQL statement."
   [q]
-  (jdbc/execute! ds q))
+  (jdbc/execute! ds q query-options))
 
 (defn get-todo
   "Returns a todo depending on the column and value specified. Defaults to id column."

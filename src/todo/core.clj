@@ -10,15 +10,15 @@
             [muuntaja.core :as m]))
 
 (def Todo-request
-  {:todos/name s/Str
-   :todos/done s/Bool})
+  {:name s/Str
+   :done s/Bool})
 
 (def Todo-response
-  (assoc Todo-request :todos/id s/Int))
+  (assoc Todo-request :id s/Int))
 
 (def Todo-patch
-  {(s/optional-key :todos/name) s/Str
-   (s/optional-key :todos/done) s/Bool})
+  {(s/optional-key :name) s/Str
+   (s/optional-key :done) s/Bool})
 
 (def router
   (ring/router
