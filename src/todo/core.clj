@@ -19,6 +19,7 @@
 (def router
   (ring/router
     [["/debug" {:get identity}]
+     ["/debug/:id" {:get identity}]
      ["/todos"
       {:post
        {:summary    "Adds a new todo"
