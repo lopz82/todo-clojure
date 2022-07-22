@@ -6,9 +6,12 @@
             [reitit.ring.coercion :as rrc]
             [todo.handlers :as handlers]))
 
-(def Todo
-  {:name s/Str
-   :done s/Bool})
+(def Todo-request
+  {:todos/name s/Str
+   :todos/done s/Bool})
+
+(def Todo-response
+  (assoc Todo-request :todos/id s/Int))
 
 (def router
   (ring/router
@@ -17,12 +20,12 @@
       {:post
        {:summary    "Adds a new todo"
         :handler    handlers/save-todo
-        :parameters {:body Todo}
+        :parameters {:body Todo-request}
         :responses  {201 {:body nil}}}
        :get
        {:summary   "Retrieves all todos"
         :handler   handlers/all-todos
-        :responses {200 {:body [Todo]}}}
+        :responses {200 {:body [Todo-response]}}}
        :delete
        {:summary   "Deletes all todos"
         :handler   handlers/delete-all-todos
