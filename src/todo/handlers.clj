@@ -30,3 +30,10 @@
   [_]
   (db/delete-all)
   (no-content))
+
+(defn get-todo
+  [{{:keys [id]} :path-params}]
+  (-> (Integer. id)
+      db/get-todo
+      first
+      ok))
