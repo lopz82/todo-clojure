@@ -14,7 +14,7 @@
 
 (defn save-todo
   [{:keys [body-params]}]
-  (db/insert-todo (vals body-params))
+  (db/insert-todo body-params)
   (created))
 
 (defn all-todos

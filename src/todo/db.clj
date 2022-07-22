@@ -27,8 +27,8 @@
 
 (defn insert-todo
   "Inserts a new todo."
-  [vals]
-  (query (sql/format {:insert-into :todos :columns [:name :done] :values [vals]})))
+  [data]
+  (query (sql/format {:insert-into :todos :columns (keys data) :values [(vals data)]})))
 
 (defn delete-todo
   "Deletes one todo."
