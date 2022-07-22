@@ -41,7 +41,7 @@
                      :responses {200 {:body Todo-response}}}}]]
     {:data {:muuntaja   m/instance
             :coercion   reitit.coercion.schema/coercion
-            :middleware [rrmm/format-middleware
+            :middleware [rrmm/format-middleware ;; Remove to get data instead of a stream when working in the REPL
                          rrc/coerce-exceptions-middleware
                          rrc/coerce-request-middleware
                          rrc/coerce-response-middleware]}}))
