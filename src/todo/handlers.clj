@@ -28,21 +28,22 @@
 
 (defn get-todo
   [{{:keys [id]} :path-params}]
-  (-> (Integer. id)
-      db/get-todo
-      first
-      ok))
+  (let [result (-> id Integer. db/get-todo first)]
+    (cond
+      (empty? result) (not-found)
+      :else (ok result))))
 
 (defn modify-todo
   [{:keys        [body-params]
     {:keys [id]} :path-params}]
-  (-> (Integer. id)
-      (db/modify-todo body-params)
-      first
-      ok))
+  (let [result (-> id Integer. (db/modify-todo body-params) first)]
+    (cond
+      (empty? result) (not-found)
+      :else (ok))))
 
 (defn delete-todo
   [{{:keys [id]} :path-params}]
-  (-> (Integer. id)
-      db/delete-todo)
-  (no-content))
+  (let [result (-> id Integer. db/delete-todo first)]
+    (cond
+      (empty? result) (not-found)
+      :else (no-content))))
