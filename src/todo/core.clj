@@ -16,6 +16,10 @@
 (def Todo-response
   (assoc Todo-request :todos/id s/Int))
 
+(def Todo-patch
+  {(s/optional-key :todos/name) s/Str
+   (s/optional-key :todos/done) s/Bool})
+
 (def router
   (ring/router
     [["/debug" {:get identity}]
@@ -38,10 +42,20 @@
                     :get
                     {:summary   "Get info about one task"
                      :handler   handlers/get-todo
+                     :responses {200 {:body Todo-response}}}
+                    :put
+                    {:summary    "Replace one task"
+                     :handler    handlers/modify-todo
+                     :parameters {:body Todo-request}
+                     :responses  {200 {:body Todo-response}}}
+                    :patch
+                    {:summary "Updates one task"
+                     :handler handlers/modify-todo
+                     :parameters {:body Todo-patch}
                      :responses {200 {:body Todo-response}}}}]]
     {:data {:muuntaja   m/instance
             :coercion   reitit.coercion.schema/coercion
-            :middleware [rrmm/format-middleware ;; Remove to get data instead of a stream when working in the REPL
+            :middleware [;; rrmm/format-middleware             ;; Remove to get data instead of a stream when working in the REPL
                          rrc/coerce-exceptions-middleware
                          rrc/coerce-request-middleware
                          rrc/coerce-response-middleware]}}))

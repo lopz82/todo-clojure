@@ -31,3 +31,8 @@
   "Deletes all todos."
   []
   (query (sql/format {:delete-from [:todos]})))
+
+(defn modify-todo
+  "Modifies a todo."
+  [id new-vals]
+  (query (sql/format {:update :todos :set new-vals :where [:= :id id] :returning [:*]})))

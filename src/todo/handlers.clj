@@ -37,3 +37,11 @@
       db/get-todo
       first
       ok))
+
+(defn modify-todo
+  [{:keys        [body-params]
+    {:keys [id]} :path-params}]
+  (-> (Integer. id)
+      (db/modify-todo body-params)
+      first
+      ok))
