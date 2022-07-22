@@ -44,3 +44,10 @@
 (def app
   (ring/ring-handler router
                      default-errors))
+
+(defn -main
+  ([port]
+   (jetty/run-jetty #'app {:port  (Integer. port)
+                           :join? true}))
+  ([]
+   (-main 3000)))
