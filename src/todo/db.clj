@@ -1,7 +1,7 @@
 (ns todo.db
-  (:require [next.jdbc :as jdbc]
-            [next.jdbc.result-set :as rs]
-            [honey.sql :as sql]))
+  (:require [honey.sql :as sql]
+            [next.jdbc :as jdbc]
+            [next.jdbc.result-set :as rs]))
 
 (def db {:dbtype "postgres" :dbname "todos" :host "localhost" :port 65432 :user "postgres" :password "pass"})
 (def ds (jdbc/get-datasource db))

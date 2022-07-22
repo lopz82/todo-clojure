@@ -1,13 +1,13 @@
 (ns todo.core
-  (:require [todo.db]
-            [reitit.ring :as ring]
-            [reitit.ring.middleware.muuntaja :as rrmm]
+  (:require [muuntaja.core :as m]
             [reitit.coercion.schema]
-            [schema.core :as s]
+            [reitit.ring :as ring]
             [reitit.ring.coercion :as rrc]
+            [reitit.ring.middleware.muuntaja :as rrmm]
             [ring.adapter.jetty :as jetty]
-            [todo.handlers :as handlers]
-            [muuntaja.core :as m]))
+            [schema.core :as s]
+            [todo.db]
+            [todo.handlers :as handlers]))
 
 (def Todo-request
   {:name s/Str
