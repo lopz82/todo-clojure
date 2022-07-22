@@ -30,7 +30,7 @@
 (defn delete-todo
   "Deletes one todo."
   [id]
-  (query (sql/format {:delete-from [:todos] :where [:= :id id]})))
+  (query (sql/format {:delete-from [:todos] :where [:= :id id] :returning [:*]})))
 
 (defn delete-all
   "Deletes all todos."
