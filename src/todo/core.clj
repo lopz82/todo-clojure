@@ -1,10 +1,13 @@
 (ns todo.core
   (:require [todo.db]
             [reitit.ring :as ring]
+            [reitit.ring.middleware.muuntaja :as rrmm]
             [reitit.coercion.schema]
             [schema.core :as s]
             [reitit.ring.coercion :as rrc]
-            [todo.handlers :as handlers]))
+            [ring.adapter.jetty :as jetty]
+            [todo.handlers :as handlers]
+            [muuntaja.core :as m]))
 
 (def Todo-request
   {:todos/name s/Str
@@ -29,9 +32,16 @@
        :delete
        {:summary   "Deletes all todos"
         :handler   handlers/delete-all-todos
-        :responses {204 nil}}}]]
-    {:data {:coercion   reitit.coercion.schema/coercion
-            :middleware [rrc/coerce-exceptions-middleware
+        :responses {204 nil}}}]
+     ["/todos/:id" {:parameters {:path {:id s/Int}}
+                    :get
+                    {:summary   "Get info about one task"
+                     :handler   handlers/get-todo
+                     :responses {200 {:body Todo-response}}}}]]
+    {:data {:muuntaja   m/instance
+            :coercion   reitit.coercion.schema/coercion
+            :middleware [rrmm/format-middleware
+                         rrc/coerce-exceptions-middleware
                          rrc/coerce-request-middleware
                          rrc/coerce-response-middleware]}}))
 
