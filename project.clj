@@ -7,5 +7,7 @@
                  [metosin/reitit "0.5.18"]
                  [com.github.seancorfield/honeysql "2.2.891"]
                  [com.github.seancorfield/next.jdbc "1.2.780"]
-                 [org.postgresql/postgresql "42.4.0"]]
-  :repl-options {:init-ns todo.core})
+                 [org.postgresql/postgresql "42.4.0"]
+                 [ring/ring-jetty-adapter "1.9.5"]]
+  :repl-options {:init-ns todo.core}
+  :main todo.core)
