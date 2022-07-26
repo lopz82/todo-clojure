@@ -3,10 +3,9 @@
             [reitit.coercion.schema]
             [reitit.ring :as ring]
             [reitit.ring.coercion :as rrc]
-            [reitit.ring.middleware.muuntaja :as rrmm]
             [ring.adapter.jetty :as jetty]
             [schema.core :as s]
-            [todo.db]
+            [todo.db :as db]
             [todo.handlers :as handlers]))
 
 (def Todo-request
@@ -40,24 +39,28 @@
         :responses {204 nil}}}]
      ["/todos/:id" {:parameters {:path {:id s/Int}}
                     :get
-                    {:summary   "Get info about one task"
-                     :handler   handlers/get-todo
-                     :responses {200 {:body Todo-response}}}
+                    {:summary    "Get info about one task"
+                     :handler    handlers/ok-or-not-found
+                     :responses  {200 {:body Todo-response}}
+                     :middleware [[handlers/database-query-middleware db/get-todo [[:path-params :id]]]]}
                     :put
                     {:summary    "Replace one task"
-                     :handler    handlers/modify-todo
+                     :handler    handlers/ok-or-not-found
                      :parameters {:body Todo-request}
-                     :responses  {200 {:body Todo-response}}}
+                     :responses  {200 {:body Todo-response}}
+                     :middleware [[handlers/database-query-middleware db/modify-todo [[:path-params :id] [:body-params]]]]}
                     :patch
                     {:summary    "Updates one task"
-                     :handler    handlers/modify-todo
+                     :handler    handlers/ok-or-not-found
                      :parameters {:body Todo-patch}
-                     :responses  {200 {:body Todo-response}}}
+                     :responses  {200 {:body Todo-response}}
+                     :middleware [[handlers/database-query-middleware db/modify-todo [[:path-params :id] [:body-params]]]]}
                     :delete
                     {:summary    "Deletes one task"
-                     :handler    handlers/delete-todo
+                     :handler    handlers/not-content-or-not-found
                      :parameters {:body nil}
-                     :responses  {204 nil}}}]]
+                     :responses  {204 nil}
+                     :middleware [[handlers/database-query-middleware db/delete-todo [[:path-params :id]]]]}}]]
     {:data {:muuntaja   m/instance
             :coercion   reitit.coercion.schema/coercion
             :middleware [;; rrmm/format-middleware             ;; Remove to get data instead of a stream when working in the REPL

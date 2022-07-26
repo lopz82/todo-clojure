@@ -20,15 +20,15 @@
        (format "%s/%s" uri)
        (header response "Location")))
 
-(defn created [] {:status 201})
-(defn no-content [] {:status 204})
-(defn not-found [] {:status 404})
+(defn created [_] {:status 201})
+(defn no-content [_] {:status 204})
+(defn not-found [_] {:status 404})
 
 (defn save-todo
   [{:keys [body-params uri]}]
   (->> (db/insert-todo body-params)
        :id
-       (add-location-header (created) uri)))
+       (add-location-header (created "") uri)))
 
 (defn all-todos
   [_]
@@ -37,26 +37,22 @@
 (defn delete-all-todos
   [_]
   (db/delete-all)
-  (no-content))
+  (no-content _))
 
-(defn get-todo
-  [{{:keys [id]} :path-params}]
-  (let [result (-> id Integer. db/get-todo)]
+(defn check-db-result
+  "Checks if the result of the query has been added to the request map
+  and responds according its successful result or failure."
+  [request success fail]
+  (let [result (:db request)]
     (cond
-      (empty? result) (not-found)
-      :else (ok result))))
+      (empty? result) (fail result)
+      :else (success result))))
 
-(defn modify-todo
-  [{:keys        [body-params]
-    {:keys [id]} :path-params}]
-  (let [result (-> id Integer. (db/modify-todo body-params))]
-    (cond
-      (empty? result) (not-found)
-      :else (ok result))))
+(defn ok-or-not-found [request] (check-db-result request ok not-found))
+(defn not-content-or-not-found [request] (check-db-result request no-content not-found))
+(defn created-or-not-found [request] (check-db-result request created not-found))
 
-(defn delete-todo
-  [{{:keys [id]} :path-params}]
-  (let [result (-> id Integer. db/delete-todo)]
-    (cond
-      (empty? result) (not-found)
-      :else (no-content))))
+(defn database-query-middleware [handler op ks]
+  (fn [request]
+    (let [values (vec (map #(get-in request %) ks))]
+      (handler (assoc request :db (apply op values))))))
