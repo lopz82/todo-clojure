@@ -21,9 +21,9 @@
 (defn get-todo
   "Returns a todo depending on the column and value specified. Defaults to id column."
   ([col val]
-   (query-one (sql/format {:select [:*], :from [:todos], :where [:= col val]})))
+   (query-one (sql/format {:select [:*], :from [:todos], :where [:= col (Integer/parseInt val)]})))
   ([val]
-   (query-one (sql/format {:select [:*], :from [:todos], :where [:= :id val]}))))
+   (query-one (sql/format {:select [:*], :from [:todos], :where [:= :id (Integer/parseInt val)]}))))
 
 (defn get-all-todos
   "Returns all todos from the table."
@@ -38,7 +38,7 @@
 (defn delete-todo
   "Deletes one todo."
   [id]
-  (query-one (sql/format {:delete-from [:todos] :where [:= :id id] :returning [:*]})))
+  (query-one (sql/format {:delete-from [:todos] :where [:= :id (Integer/parseInt id)] :returning [:*]})))
 
 (defn delete-all
   "Deletes all todos."
@@ -48,4 +48,4 @@
 (defn modify-todo
   "Modifies a todo."
   [id new-vals]
-  (query-one (sql/format {:update :todos :set new-vals :where [:= :id id] :returning [:*]})))
+  (query-one (sql/format {:update :todos :set new-vals :where [:= :id (Integer/parseInt id)] :returning [:*]})))
