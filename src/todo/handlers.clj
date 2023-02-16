@@ -1,12 +1,6 @@
 (ns todo.handlers
   (:require [todo.db :as db]))
 
-(defn ok
-  ([body]
-   {:status 200
-    :body   body})
-  ([]
-   (ok "")))
 
 (defn header
   "Adds a header to the response."
@@ -16,10 +10,9 @@
 (defn add-location-header
   "Adds a location header to the response using the base uri."
   [response uri id]
-  (->> id
-       (format "%s/%s" uri)
-       (header response "Location")))
+  (header response "Location" (format "%s/%s" uri id)))
 
+(defn ok [body] {:status 200 :body body})
 (defn created [_] {:status 201})
 (defn no-content [_] {:status 204})
 (defn not-found [_] {:status 404})
@@ -30,14 +23,12 @@
        :id
        (add-location-header (created "") uri)))
 
-(defn all-todos
-  [_]
-  (ok (db/get-all-todos)))
+(defn all-todos [_] (ok (db/get-all-todos)))
 
 (defn delete-all-todos
   [_]
   (db/delete-all)
-  (no-content _))
+  (no-content ""))
 
 (defn check-db-result
   "Checks if the result of the query has been added to the request map
@@ -50,7 +41,6 @@
 
 (defn ok-or-not-found [request] (check-db-result request ok not-found))
 (defn not-content-or-not-found [request] (check-db-result request no-content not-found))
-(defn created-or-not-found [request] (check-db-result request created not-found))
 
 (defn database-query-middleware [handler op ks]
   (fn [request]
